@@ -10,8 +10,8 @@ import Components from 'unplugin-vue-components/webpack'
 export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
   const baseConfig: UserConfigExport<'webpack5'> = {
     projectName: 'mini-program',
-    date: '2025-2-17',
-    designWidth (input) {
+    date: '2025-2-18',
+    designWidth(input) {
       // 配置 NutUI 375 尺寸
       if (input?.file?.replace(/\\+/g, '/').indexOf('@nutui') > -1) {
         return 375
@@ -24,6 +24,9 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
       750: 1,
       375: 2,
       828: 1.81 / 2
+    },
+    sass: {
+      data: `@import "@nutui/nutui-taro/dist/styles/variables-jdt.scss";`
     },
     sourceRoot: 'src',
     outputRoot: 'dist',
@@ -44,7 +47,7 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
       }
     },
     cache: {
-      enable: false // Webpack 持久化缓存配置，建议开启。默认配置请参考：https://docs.taro.zone/docs/config-detail#cache
+      enable: true // Webpack 持久化缓存配置，建议开启。默认配置请参考：https://docs.taro.zone/docs/config-detail#cache
     },
     mini: {
       postcss: {
@@ -65,7 +68,7 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
       webpackChain(chain) {
         chain.resolve.plugin('tsconfig-paths').use(TsconfigPathsPlugin)
         chain.plugin('unplugin-vue-components').use(Components({
-          resolvers: [NutUIResolver({taro: true})]
+          resolvers: [NutUIResolver({ taro: true, importStyle: "sass" })]
         }))
       }
     },
@@ -97,7 +100,7 @@ export default defineConfig<'webpack5'>(async (merge, { command, mode }) => {
       webpackChain(chain) {
         chain.resolve.plugin('tsconfig-paths').use(TsconfigPathsPlugin)
         chain.plugin('unplugin-vue-components').use(Components({
-          resolvers: [NutUIResolver({taro: true})]
+          resolvers: [NutUIResolver({ taro: true, importStyle: "sass" })]
         }))
       }
     },
